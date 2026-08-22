@@ -1,0 +1,61 @@
+# ===== 敏感信息（最重要！） =====
+.env
+*.env
+!.env.example
+*.key
+*.pem
+*.secret
+
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+
+# ===== 向量数据库 =====
+chroma_db/
+*.chroma/
+
+# ===== 上传文件 =====
+uploads/
+uploads33/
+项目uploads文件/
+
+# ===== 前端 =====
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# ===== IDE / 编辑器 =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== 系统文件 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 临时文件 =====
+*.log
+*.tmp
+*.bak
+~$*.docx
+~$*.doc
+~$*.xlsx
+
+# ===== 打包文件 =====
+*.zip
+*.rar
+*.7z
+*.tar.gz
