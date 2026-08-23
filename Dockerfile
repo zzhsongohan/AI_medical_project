@@ -21,7 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt -i https://pypi.tuna.tsinghua
 COPY . .
 
 # 暴露端口
-EXPOSE 8003
+EXPOSE 8000
 
 # 启动命令
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8003"]
+#容器在容器中监听8000端口
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
