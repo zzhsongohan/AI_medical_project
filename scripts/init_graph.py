@@ -11,7 +11,7 @@ NEO4J_URI = os.getenv("NEO4J_URI", "bolt://127.0.0.1:7687")
 NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "12345678")
 
-# 医疗知识数据
+# 医疗知识数据合集
 MEDICAL_DATA = [
     {
         "disease": "感冒", "department": "内科",
