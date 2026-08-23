@@ -68,6 +68,7 @@ services:
       - UPLOAD_DIR=/app/uploads
       - CHROMA_PERSIST_DIR=/app/chroma_db
     ports:
+      #右边的8000必须与Dockerfile中EXPOSE的监听端口一致
       - "8003:8000"
     volumes:
       - uploads_data:/app/uploads

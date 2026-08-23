@@ -71,6 +71,8 @@ app.add_middleware(
 if os.path.exists(settings.upload_dir):
     app.mount("/uploads33", StaticFiles(directory=settings.upload_dir), name="uploads")
 
+from app.api.v1 import api_router
+app.include_router(api_router)
 
 @app.get("/")
 async def root():
