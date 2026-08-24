@@ -73,6 +73,10 @@ services:
     volumes:
       - uploads_data:/app/uploads
       - chroma_data:/app/chroma_db
+      - ./app:/app/app
+      - ./main.py:/app/main.py
+    # 👇 加这个命令：开启热重载
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 volumes:
   mysql_data:
