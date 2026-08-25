@@ -1,39 +1,61 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
 from app.core.response import success
 from app.services.graph_service import get_graph_service
+from app.schemas.common import GraphQueryRequest
+from app.core.deps import CurrentUser, require_roles
 
 router = APIRouter()
 
-class SymptomCheckRequest(BaseModel):
-    symptoms: list[str]
+# class SymptomCheckRequest(BaseModel):
+#     symptoms: list[str]
 
 
 
-@router.get("/symptoms")
-def get_symptoms():
-    """获取所有症状列表"""
-    data = get_graph_service().get_all_symptoms()
-    return success(data)
+# @router.get("/symptoms")
+# def get_symptoms():
+#     """获取所有症状列表"""
+#     data = get_graph_service().get_all_symptoms()
+#     return success(data)
 
 
-@router.post("/symptom-check")
-def symptom_check(req: SymptomCheckRequest):
-    """症状自查 - 根据输入的症状推理可能疾病"""
-    result = get_graph_service().infer_diseases_by_symptoms(req.symptoms)
-    return success(result)
+@router.post("/infer")
+def infer_diseases(req: GraphQueryRequest, _: CurrentUser = Depends(require_roles("user", "admin", "doctor"))):
+    """根据症状推理可能疾病"""
+    results = get_graph_service().infer_diseases_by_symptoms(req.symptoms)
+    return success(results)
 
 
 @router.get("/disease/{name}")
 def disease_detail(name: str):
     """获取疾病详情"""
-    data = get_graph_service().get_disease_detail(name)
-    return success(data)
+    detail = get_graph_service().get_disease_detail(name)
+    return success(detail)
 
 
-@router.get("/visualize")
-def visualize(limit: int = 100):
-    """知识图谱可视化数据"""
-    data = get_graph_service().get_graph_data(limit)
-    return success(data)
+@router.get("/full")
+def full_graph():
+    """获取完整知识图谱（默认可视化）"""
+    graph = get_graph_service().get_full_graph()
+    return success(graph)
+
+@router.get("/subgraph")
+def entity_subgraph(entity: str):
+    """获取实体子图（可视化）"""
+    graph = get_graph_service().get_entity_subgraph(entity)
+    return success(graph)
+
+
+@router.get("/search")
+def search_entities(keyword: str):
+    """搜索图谱实体"""
+    results = get_graph_service().search_entities(keyword)
+    return success(results)
+
+
+@router.get("/stats")
+def graph_stats(_: CurrentUser = Depends(require_roles("admin"))):
+    """图谱统计"""
+    stats = get_graph_service().get_graph_stats()
+    return success(stats)
