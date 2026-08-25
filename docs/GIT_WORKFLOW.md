@@ -208,17 +208,19 @@ git pull main → 删除分支 → 完成
 
 ## 六、常用命令速查
 
-| 操作 | 命令 |
-|------|------|
-| 查看状态 | `git status` |
-| 查看本地分支 | `git branch` |
-| 查看所有分支 | `git branch -a` |
-| 查看提交历史 | `git log --oneline` |
-| 切换分支 | `git checkout <branch>` / `git switch <branch>` |
-| 创建并切换 | `git checkout -b <branch>` / `git switch -c <branch>` |
-| 删除本地分支 | `git branch -d <branch>` |
-| 删除远程分支 | `git push origin --delete <branch>` |
-| 暂存当前修改 | `git stash` |
-| 恢复暂存 | `git stash pop` |
-| 撤销最后一次提交（保留改动） | `git reset --soft HEAD~1` |
-| 查看暂存和工作区差异 | `git diff` |
+| 操作             | 命令                                                                                                                  |
+|----------------|---------------------------------------------------------------------------------------------------------------------|
+| 查看状态           | `git status`                                                                                                        |
+| 查看本地分支         | `git branch`                                                                                                        |
+| 查看所有分支         | `git branch -a`                                                                                                     |
+| 查看提交历史         | `git log --oneline`                                                                                                 |
+| 切换分支           | `git checkout <branch>` / `git switch <branch>`                                                                     |
+| 创建并切换          | `git checkout -b <branch>` / `git switch -c <branch>`                                                               |
+| 删除本地分支         | `git branch -d <branch>`                                                                                            |
+| 删除远程分支         | `git push origin --delete <branch>`                                                                                 |
+| 暂存当前修改         | `git stash`                                                                                                         |
+| 恢复暂存           | `git stash pop`                                                                                                     |
+| 撤销最后一次提交（保留改动） | `git reset --soft HEAD~1`                                                                                           |
+| 查看暂存和工作区差异     | `git diff`                                                                                                          |
+| 配置VPN          | `git config --global http.proxy http://127.0.0.1:7890<br/>git config --global https.proxy http://127.0.0.1:7890git` |
+
