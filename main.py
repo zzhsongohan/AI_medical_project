@@ -69,7 +69,7 @@ app.add_middleware(
 
 # 静态文件挂载
 if os.path.exists(settings.upload_dir):
-    app.mount("/uploads33", StaticFiles(directory=settings.upload_dir), name="uploads")
+    app.mount("/uploads", StaticFiles(directory=settings.upload_dir), name="uploads")
 
 from app.api.v1 import api_router
 app.include_router(api_router)

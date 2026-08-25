@@ -22,7 +22,8 @@ def format_date(dt) -> str:
     return str(dt)
 
 def save_upload_file(file_content: bytes, original_name: str, sub_dir: str = "") -> str:
-    from core.config import settings
+    from app.core.config import settings
+    #项目目录/uploads
     upload_base = settings.upload_dir
     target_dir = os.path.join(upload_base, sub_dir) if sub_dir else upload_base
     os.makedirs(target_dir, exist_ok=True)
@@ -31,7 +32,7 @@ def save_upload_file(file_content: bytes, original_name: str, sub_dir: str = "")
     file_path = os.path.join(target_dir, new_name)
     with open(file_path, "wb") as f:
         f.write(file_content)
-    rel_path = f"/uploads33/{sub_dir}/{new_name}" if sub_dir else f"/uploads33/{new_name}"
+    rel_path = f"/uploads/{sub_dir}/{new_name}" if sub_dir else f"/uploads/{new_name}"
     return rel_path.replace("\\", "/")
 
 def get_file_type(filename: str) -> str:

@@ -28,7 +28,11 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "12345678")
 # LLM大模型配置（阿里百炼兼容模式）
 DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
 DASHSCOPE_BASE_URL = os.getenv("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+
 LLM_MODEL = os.getenv("LLM_MODEL", "deepseek-chat")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
+DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://deepseek-ai.com/v1")
+
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-v4")
 EMBEDDING_DIMENSIONS = int(os.getenv("EMBEDDING_DIMENSIONS", "2048"))
 EMBEDDING_BATCH_SIZE = 10
@@ -65,7 +69,11 @@ class Settings:
     neo4j_password: str = NEO4J_PASSWORD
     dashscope_api_key: str = DASHSCOPE_API_KEY
     dashscope_base_url: str = DASHSCOPE_BASE_URL
+
     llm_model: str = LLM_MODEL
+    llm_api_key: str = DEEPSEEK_API_KEY
+    llm_base_url: str = DEEPSEEK_BASE_URL
+
     embedding_model: str = EMBEDDING_MODEL
     embedding_dimensions: int = EMBEDDING_DIMENSIONS
     embedding_batch_size: int = EMBEDDING_BATCH_SIZE
