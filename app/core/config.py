@@ -26,12 +26,12 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "12345678")
 
 
 # LLM大模型配置（阿里百炼兼容模式）
-DASHSCOPE_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
-DASHSCOPE_BASE_URL = os.getenv("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
+EMBEDDING_API_KEY = os.getenv("DASHSCOPE_API_KEY", "")
+EMBEDDING_BASE_URL = os.getenv("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1")
 
 LLM_MODEL = os.getenv("LLM_MODEL", "deepseek-chat")
-DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
-DEEPSEEK_BASE_URL = os.getenv("DEEPSEEK_BASE_URL", "https://deepseek-ai.com/v1")
+LLM_API_KEY = os.getenv("LLM_API_KEY", "")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "https://deepseek.ai.com/v1")
 
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "text-embedding-v4")
 EMBEDDING_DIMENSIONS = int(os.getenv("EMBEDDING_DIMENSIONS", "2048"))
@@ -55,24 +55,28 @@ CHUNK_OVERLAP = 80
 RETRIEVAL_TOP_K = 5
 
 # 启动时检查API Key
-if not DASHSCOPE_API_KEY:
+if not EMBEDDING_API_KEY:
     print("[警告] 未检测到环境变量 DASHSCOPE_API_KEY，LLM和向量化功能将无法正常使用！")
 
 
 class Settings:
     """配置类 - 统一访问入口"""
     project_name: str = PROJECT_NAME
+
     base_dir: Path = BASE_DIR
+
     database_url: str = DATABASE_URL
+
     neo4j_uri: str = NEO4J_URI
     neo4j_user: str = NEO4J_USER
     neo4j_password: str = NEO4J_PASSWORD
-    dashscope_api_key: str = DASHSCOPE_API_KEY
-    dashscope_base_url: str = DASHSCOPE_BASE_URL
+
+    embedding_api_key: str = EMBEDDING_API_KEY
+    embedding_base_url: str = EMBEDDING_BASE_URL
 
     llm_model: str = LLM_MODEL
-    llm_api_key: str = DEEPSEEK_API_KEY
-    llm_base_url: str = DEEPSEEK_BASE_URL
+    llm_api_key: str = LLM_API_KEY
+    llm_base_url: str = LLM_BASE_URL
 
     embedding_model: str = EMBEDDING_MODEL
     embedding_dimensions: int = EMBEDDING_DIMENSIONS

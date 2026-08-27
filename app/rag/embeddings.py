@@ -15,8 +15,8 @@ class AlibabaEmbeddings(Embeddings):
     def __init__(self):
         """初始化 DashScope 嵌入服务（OpenAI 兼容协议）"""
         self.client = OpenAI(
-            api_key=settings.dashscope_api_key,
-            base_url=settings.dashscope_base_url,
+            api_key=settings.embedding_api_key,
+            base_url=settings.embedding_base_url,
         )
         self.model = settings.embedding_model
         self.dimensions = settings.embedding_dimensions
