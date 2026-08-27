@@ -20,7 +20,7 @@ async def lifespan(app: FastAPI):
     os.makedirs(os.path.join(settings.upload_dir, "avatar"), exist_ok=True)
     os.makedirs(settings.chroma_persist_dir, exist_ok=True)
     print(f"[启动] {settings.project_name} 服务已就绪")
-    if not settings.dashscope_api_key:
+    if not settings.embedding_api_key:
         print("[警告] DASHSCOPE_API_KEY 未设置，LLM功能不可用")
     yield
 
