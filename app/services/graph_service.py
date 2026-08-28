@@ -138,7 +138,7 @@ class GraphService:
         links = []
         with self.driver.session() as session:
             result = session.run(
-                "MATCH (n {name: \})-[r]-(m) RETURN n, type(r) AS rel, m LIMIT 30",
+                "MATCH (n {name: $name})-[r]-(m) RETURN n, type(r) AS rel, m LIMIT 30",
                 name=entity_name,
             )
             for record in result:
@@ -149,20 +149,32 @@ class GraphService:
                 m_id = m.element_id
                 n_label = list(n.labels)[0] if n.labels else "Unknown"
                 m_label = list(m.labels)[0] if m.labels else "Unknown"
-                nodes_map[n_id] = {"id": n_id, "name": n.get("name", ""), "category": n_label}
-                nodes_map[m_id] = {"id": m_id, "name": m.get("name", ""), "category": m_label}
+                nodes_map[n_id] = {"id": n_id, "name": n.get("name", ""), "category": n_label, "group": n_label}
+                nodes_map[m_id] = {"id": m_id, "name": m.get("name", ""), "category": m_label, "group": m_label}
                 links.append({"source": n_id, "target": m_id, "relation": rel})
         return {"nodes": list(nodes_map.values()), "links": links}
 
     def search_entities(self, keyword: str) -> List[Dict]:
-        """搜索图谱实体"""
+        """搜索图谱实体（支持症状别名归一化）"""
+        keyword = (keyword or "").strip()
+        if not keyword:
+            return []
+        # 别名归一化：如果关键词在别名表中，同时搜索映射后的标准名
+        search_terms = {keyword}
+        if keyword in self.SYMPTOM_ALIASES:
+            search_terms.add(self.SYMPTOM_ALIASES[keyword])
+        # 反过来：如果关键词本身就是标准名，也搜索其别名（扩充召回）
+        for alias, standard in self.SYMPTOM_ALIASES.items():
+            if standard == keyword:
+                search_terms.add(alias)
+        # 用 OR 条件一次查询
         query = """
-        MATCH (n) WHERE n.name CONTAINS $keyword
+        MATCH (n) WHERE any(term IN $terms WHERE n.name CONTAINS term)
         RETURN n.name AS name, labels(n)[0] AS label
         LIMIT 20
         """
         with self.driver.session() as session:
-            result = session.run(query, keyword=keyword)
+            result = session.run(query, terms=list(search_terms))
             return [dict(r) for r in result]
 
     def get_full_graph(self) -> Dict[str, Any]:
@@ -180,8 +192,8 @@ class GraphService:
                 b_id = b.element_id
                 a_label = list(a.labels)[0] if a.labels else "Unknown"
                 b_label = list(b.labels)[0] if b.labels else "Unknown"
-                nodes_map[a_id] = {"id": a_id, "name": a.get("name", ""), "category": a_label}
-                nodes_map[b_id] = {"id": b_id, "name": b.get("name", ""), "category": b_label}
+                nodes_map[a_id] = {"id": a_id, "name": a.get("name", ""), "category": a_label, "group": a_label}
+                nodes_map[b_id] = {"id": b_id, "name": b.get("name", ""), "category": b_label, "group": b_label}
                 links.append({"source": a_id, "target": b_id, "relation": rel})
         return {"nodes": list(nodes_map.values()), "links": links}
 
