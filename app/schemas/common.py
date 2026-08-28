@@ -116,7 +116,7 @@ class GraphQueryRequest(BaseModel):
 class DoctorConsultCreate(BaseModel):
     """发起医生查询"""
     doctor_id: Optional[int] = None
-    chief_complaint: str
+    chief_complaint: str #主要症状问题
 
 class DoctorReplyCreate(BaseModel):
     """医生回复"""
