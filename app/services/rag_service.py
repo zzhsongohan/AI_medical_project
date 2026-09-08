@@ -8,7 +8,7 @@ from langchain_openai import ChatOpenAI
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.rag.loader import load_document
+from app.rag.loader import load_documents
 from app.rag.splitter import split_text
 from app.rag.vector_store import get_vector_store
 from app.models.knowledge import KnowledgeFile, KnowledgeChunk
@@ -67,10 +67,25 @@ class RagService:
             # 统一路径格式，兼容Windows和Linux
             abs_path = file_record.file_path.replace("\\", "/")
             abs_path = abs_path.replace("/", os.sep)
-            # 步骤1：加载文档内容（支持txt/pdf/doc/md等格式）
-            text = load_document(abs_path)
-            # 步骤2：文本分块（按chunk_size=500，重叠80字符）
-            chunks = split_text(text)
+            # 步骤1：结构化加载文档（返回内容+元数据的文档块列表）
+            docs = load_documents(abs_path)
+
+            # 步骤2：对每个文档块进行分块（保留元数据）
+            all_chunks = []  # 分块后的文本
+            all_metas = []  # 每个分块的元数据
+
+            for doc in docs:
+                doc_content = doc["content"]
+                doc_meta = doc["metadata"]
+                # 对该文档块进行分块
+                sub_chunks = split_text(doc_content)
+                for chunk in sub_chunks:
+                    all_chunks.append(chunk)
+                    # 每个分块继承文档的元数据
+                    all_metas.append(doc_meta.copy())
+
+            chunks = all_chunks
+            chunk_metas = all_metas
 
             # 步骤3：清理该文件的旧分块和旧向量（幂等处理）
             db.query(KnowledgeChunk).filter(KnowledgeChunk.file_id == file_record.id).delete()
@@ -88,7 +103,14 @@ class RagService:
                 )
                 db.add(db_chunk)
                 texts.append(chunk)
-                metadatas.append({"file_id": file_record.id, "file_name": file_record.file_name, "chunk_index": idx})
+                # 合并元数据：分块自带的（来自loader）+ file_id/chunk_index
+                meta = chunk_metas[idx].copy() if idx < len(chunk_metas) else {}
+                meta.update({
+                    "file_id": file_record.id,
+                    "file_name": file_record.file_name,
+                    "chunk_index": idx,
+                })
+                metadatas.append(meta)
                 ids.append(vector_id)
             db.commit()
             # 步骤5：批量向量化并写入Chroma（分批调用嵌入API，避免超限）
