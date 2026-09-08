@@ -7,11 +7,11 @@ WORKDIR /app
 
 # 安装系统依赖（编译 chromadb 等需要）
 # 先替换为国内 apt 镜像源，加速下载
-RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources \
-    && apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+#RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources \
+#        && apt-get update && apt-get install -y \
+#        gcc \
+#        g++ \
+#        && rm -rf /var/lib/apt/lists/*
 
 # 先复制依赖文件，利用 Docker 缓存层
 COPY requirements.txt .
